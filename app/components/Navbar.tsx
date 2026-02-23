@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useNavStore } from "../store/useNavStore";
+import { useGeneralStore } from "../store/useGeneralStore";
 
 interface NavLink {
   name: string;
@@ -14,6 +15,8 @@ interface NavLink {
 
 const Navbar: React.FC = () => {
   const { isOpen, toggleMenu, closeMenu } = useNavStore();
+  const { resumeUrl, fetchAllData } = useGeneralStore();
+
   const [scrolled, setScrolled] = useState<boolean>(false);
   const pathname = usePathname();
 
@@ -28,7 +31,9 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     closeMenu();
   }, [pathname, closeMenu]);
-
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
   const navLinks: NavLink[] = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
@@ -69,12 +74,12 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            <a
-              href="#"
+            <Link
+              href={resumeUrl ? `${resumeUrl}?dl=sadaf_shahab_cv.pdf` : "#"}
               className="px-4 py-2 rounded-full border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 text-sm font-medium transition-colors"
             >
               Download CV
-            </a>
+            </Link>
             <Link
               href="/contact"
               className="px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20"

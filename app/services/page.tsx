@@ -36,8 +36,8 @@ const Services = () => {
           </span>
         </h1>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base md:text-lg px-2">
-          Comprehensive solutions tailored to your business needs. From
-          development to marketing, I've got you covered.
+          {`Comprehensive solutions tailored to your business needs. From
+          development to marketing, I've got you covered.`}
         </p>
       </motion.div>
 

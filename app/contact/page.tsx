@@ -1,28 +1,27 @@
 "use client";
-import React, { useState } from "react";
+
 import { motion } from "framer-motion";
 import { Mail, Send, ExternalLink } from "lucide-react";
-import { personalInfo } from "../data";
+
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import Link from "next/link";
+import { useGeneralStore } from "../store/useGeneralStore";
+import { useContactStore } from "../store/useContactStore";
 
 const Contact = () => {
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const { info } = useGeneralStore();
+  const {
+    formState,
+    setFormValue,
+    submitForm,
+    isSubmitting,
+    isSuccess,
+    error,
+  } = useContactStore();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setFormState({ name: "", email: "", message: "" });
-    setTimeout(() => setIsSuccess(false), 5000);
+    submitForm();
   };
 
   return (
@@ -40,8 +39,8 @@ const Contact = () => {
           </span>
         </h1>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base md:text-lg px-2">
-          Have a project in mind or want to collaborate? I'd love to hear from
-          you.
+          {`  Have a project in mind or want to collaborate? I'd love to hear from
+          you.`}
         </p>
       </motion.div>
 
@@ -67,12 +66,12 @@ const Contact = () => {
                   <h4 className="font-medium text-slate-200 text-sm md:text-base mb-1">
                     Email
                   </h4>
-                  <a
-                    href={`mailto:${personalInfo.email}`}
+                  <Link
+                    href={`mailto:${info?.email}`}
                     className="text-slate-400 hover:text-indigo-400 transition-colors text-xs md:text-sm truncate block"
                   >
-                    {personalInfo.email}
-                  </a>
+                    {info?.email}
+                  </Link>
                 </div>
               </div>
 
@@ -86,7 +85,7 @@ const Contact = () => {
                     LinkedIn
                   </h4>
                   <a
-                    href={personalInfo.linkedin}
+                    href={info?.linkedin}
                     target="_blank"
                     rel="noreferrer"
                     className="text-slate-400 hover:text-indigo-400 transition-colors text-xs md:text-sm flex items-center gap-1"
@@ -105,14 +104,16 @@ const Contact = () => {
                   <h4 className="font-medium text-slate-200 text-sm md:text-base mb-1">
                     GitHub
                   </h4>
-                  <Link
-                    href={personalInfo.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-slate-400 hover:text-indigo-400 transition-colors text-xs md:text-sm flex items-center gap-1"
-                  >
-                    Explore my code <ExternalLink className="w-3 h-3" />
-                  </Link>
+                  {info?.github && (
+                    <Link
+                      href={info?.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-slate-400 hover:text-indigo-400 transition-colors text-xs md:text-sm flex items-center gap-1"
+                    >
+                      Explore my code <ExternalLink className="w-3 h-3" />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -120,11 +121,11 @@ const Contact = () => {
 
           <div className="bg-linear-to-br from-indigo-900/20 to-purple-900/20 p-6 md:p-8 rounded-2xl border border-indigo-500/20">
             <h3 className="text-lg md:text-xl font-bold mb-3 text-indigo-300">
-              Let's collaborate
+              {`Let's collaborate`}
             </h3>
             <p className="text-slate-400 italic text-sm md:text-base leading-relaxed">
-              "Let's collaborate and turn ideas into impactful digital
-              experiences."
+              {`  "Let's collaborate and turn ideas into impactful digital
+              experiences."`}
             </p>
           </div>
         </motion.div>
@@ -150,9 +151,7 @@ const Contact = () => {
                   id="name"
                   required
                   value={formState.name}
-                  onChange={(e) =>
-                    setFormState({ ...formState, name: e.target.value })
-                  }
+                  onChange={(e) => setFormValue("name", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm md:text-base"
                   placeholder="John Doe"
                 />
@@ -170,9 +169,7 @@ const Contact = () => {
                   id="email"
                   required
                   value={formState.email}
-                  onChange={(e) =>
-                    setFormState({ ...formState, email: e.target.value })
-                  }
+                  onChange={(e) => setFormValue("email", e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-sm md:text-base"
                   placeholder="john@example.com"
                 />
@@ -191,9 +188,7 @@ const Contact = () => {
                 required
                 rows={5}
                 value={formState.message}
-                onChange={(e) =>
-                  setFormState({ ...formState, message: e.target.value })
-                }
+                onChange={(e) => setFormValue("message", e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none text-sm md:text-base"
                 placeholder="Tell me about your project or vision..."
               />
@@ -226,9 +221,10 @@ const Contact = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="p-4 rounded-xl bg-emerald-500/10 text-emerald-400 text-sm text-center border border-emerald-500/20 font-medium"
               >
-                ✓ Message sent successfully! I'll get back to you soon.
+                {`✓ Message sent successfully! I'll get back to you soon.`}
               </motion.div>
             )}
+            {error && <p className="text-red-400">{error}</p>}
           </form>
         </motion.div>
       </div>

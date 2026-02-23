@@ -11,12 +11,11 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { personalInfo, projects } from "./data";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import Image from "next/image";
-import { client } from "@/sanity/lib/client";
-import { resumeQuery } from "./queries/resumeQuery";
+
 import { useGeneralStore } from "./store/useGeneralStore";
+import { urlFor } from "@/sanity/lib/image";
 
 const TypingEffect = ({
   text,
@@ -47,10 +46,19 @@ const TypingEffect = ({
 };
 
 const Home = () => {
-  const { resumeUrl, fetchResume } = useGeneralStore();
+  const { resumeUrl, fetchAllData, isLoading, info, featuredProjects } =
+    useGeneralStore();
   useEffect(() => {
-    fetchResume();
-  }, [fetchResume]);
+    fetchAllData();
+  }, [fetchAllData]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500"></div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-24 pb-24">
       {/* Hero Section */}
@@ -72,19 +80,19 @@ const Home = () => {
 
             {/* Fixed: Line height and responsive font size */}
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-[1.1] md:leading-tight">
-              Hi, I'm{" "}
+              {` Hi, I'm`}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">
-                {personalInfo.name}
+                {info?.name}
               </span>
             </h1>
 
             {/* Fixed: Min-height allows text to wrap without overlapping buttons */}
             <div className="text-lg md:text-2xl text-slate-400 mb-8 min-h-20 md:min-h-16 flex items-center justify-center">
-              <TypingEffect text={personalInfo.title} speed={50} />
+              <TypingEffect text={info?.title || ""} speed={50} />
             </div>
 
             <p className="max-w-2xl mx-auto text-slate-400 mb-10 text-sm md:text-lg leading-relaxed">
-              {personalInfo.bio}
+              {info?.bio}
             </p>
 
             {/* Fixed: Better button stacking and width */}
@@ -103,7 +111,7 @@ const Home = () => {
                 Hire Me
               </Link>
               <Link
-                href={resumeUrl ? `${resumeUrl}?dl=YourName_CV.pdf` : "#"}
+                href={resumeUrl ? `${resumeUrl}?dl=sadaf_shahab.pdf` : "#"}
                 className={`w-full sm:w-auto px-8 py-4 rounded-full border border-indigo-500/30 text-indigo-400 font-bold transition-all flex items-center justify-center gap-2 ${
                   !resumeUrl
                     ? "opacity-50 cursor-not-allowed"
@@ -117,26 +125,23 @@ const Home = () => {
 
             {/* Fixed: Increased margin top to separate from buttons */}
             <div className="mt-16 flex items-center justify-center gap-8">
-              <Link
-                href={personalInfo.linkedin}
-                target="_blank"
-                className="text-slate-400 hover:text-indigo-400 transition-colors"
-              >
-                <BsLinkedin className="w-6 h-6" />
-              </Link>
-              <Link
-                href={personalInfo.github}
-                target="_blank"
-                className="text-slate-400 hover:text-indigo-400 transition-colors"
-              >
-                <BsGithub className="w-6 h-6" />
-              </Link>
-              <Link
-                href={`mailto:${personalInfo.email}`}
-                className="text-slate-400 hover:text-indigo-400 transition-colors"
-              >
-                <Mail className="w-6 h-6" />
-              </Link>
+              {info?.linkedin && (
+                <Link href={info.linkedin} target="_blank" className="...">
+                  <BsLinkedin className="w-6 h-6" />
+                </Link>
+              )}
+
+              {info?.github && (
+                <Link href={info.github} target="_blank" className="...">
+                  <BsGithub className="w-6 h-6" />
+                </Link>
+              )}
+
+              {info?.email && (
+                <Link href={`mailto:${info.email}`} className="...">
+                  <Mail className="w-6 h-6" />
+                </Link>
+              )}
             </div>
           </motion.div>
         </div>
@@ -152,9 +157,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl font-bold mb-6">About Me</h2>
-            <p className="text-slate-400 mb-6 leading-relaxed">
-              {personalInfo.about}
-            </p>
+            <p className="text-slate-400 mb-6 leading-relaxed">{info?.about}</p>
             <div className="space-y-4">
               {[
                 {
@@ -183,7 +186,7 @@ const Home = () => {
                 href="/contact"
                 className="text-indigo-400 hover:text-indigo-300 font-medium inline-flex items-center gap-2 group"
               >
-                Let's work together{" "}
+                {`Let's work together`}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -232,14 +235,14 @@ const Home = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Featured Projects</h2>
           <p className="text-slate-400">
-            A glimpse of what I've built recently
+            {`A glimpse of what I've built recently`}
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {projects.slice(0, 3).map((project, index) => (
+          {featuredProjects.slice(0, 3).map((project, index) => (
             <motion.div
-              key={project.id}
+              key={project._id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -248,7 +251,7 @@ const Home = () => {
             >
               <div className="aspect-video overflow-hidden">
                 <Image
-                  src={project.image}
+                  src={urlFor(project.mainImage).url()}
                   alt={project.title}
                   width={800}
                   height={800}
@@ -296,12 +299,12 @@ const Home = () => {
           <div className="absolute inset-0 bg-grid-white/[0.05] bg-size-[20px_20px]" />
           <div className="relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Let's Build Something Amazing Together
+              {`Let's Build Something Amazing Together`}
             </h2>
             <p className="text-slate-300 mb-8 max-w-xl mx-auto">
-              Whether you need a full-stack application, an AI chatbot, or a
+              {` Whether you need a full-stack application, an AI chatbot, or a
               digital marketing strategy, I'm here to help you achieve your
-              goals.
+              goals.`}
             </p>
             <Link
               href="/contact"

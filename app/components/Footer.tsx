@@ -1,10 +1,11 @@
-import React from "react";
+"use client";
 import { Mail } from "lucide-react";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import Link from "next/link";
-import { personalInfo } from "../data";
+import { useGeneralStore } from "../store/useGeneralStore";
 
 const Footer = () => {
+  const { info } = useGeneralStore();
   return (
     <footer className="bg-slate-950 border-t border-slate-800 pt-12 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,28 +45,34 @@ const Footer = () => {
               Connect
             </h4>
             <div className="flex space-x-4">
-              <Link
-                href={personalInfo.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-indigo-600 transition-all duration-300"
-              >
-                <BsGithub className="w-5 h-5" />
-              </Link>
-              <Link
-                href={personalInfo.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
-              >
-                <BsLinkedin className="w-5 h-5" />
-              </Link>
-              <Link
-                href={`mailto:${personalInfo.email}`}
-                className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-red-500 transition-all duration-300"
-              >
-                <Mail className="w-5 h-5" />
-              </Link>
+              {info?.github && (
+                <Link
+                  href={info?.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-indigo-600 transition-all duration-300"
+                >
+                  <BsGithub className="w-5 h-5" />
+                </Link>
+              )}
+              {info?.linkedin && (
+                <Link
+                  href={info.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-blue-600 transition-all duration-300"
+                >
+                  <BsLinkedin className="w-5 h-5" />
+                </Link>
+              )}
+              {info?.email && (
+                <Link
+                  href={`mailto:${info.email}`}
+                  className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-red-500 transition-all duration-300"
+                >
+                  <Mail className="w-5 h-5" />
+                </Link>
+              )}
             </div>
           </div>
         </div>

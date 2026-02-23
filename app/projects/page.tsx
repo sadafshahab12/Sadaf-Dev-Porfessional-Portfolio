@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "../data";
 import { ExternalLink } from "lucide-react";
 import { BsGithub } from "react-icons/bs";
 import Link from "next/link";
