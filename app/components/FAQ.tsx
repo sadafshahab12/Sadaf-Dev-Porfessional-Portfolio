@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { FAQ as FAQType } from "../store/usePricingStore";
+import { FAQ as FAQType } from "../types/plan";
 
 interface FAQItemProps {
   question: string;
@@ -45,7 +45,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
 };
 
 interface FAQProps {
-  items: FAQType[]; 
+  items: FAQType[];
 }
 
 const FAQ: React.FC<FAQProps> = ({ items }) => {
