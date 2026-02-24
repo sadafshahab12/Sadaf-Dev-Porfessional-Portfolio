@@ -33,7 +33,7 @@ export default defineType({
       title: "Project Thumbnail",
       type: "image",
       options: {
-        hotspot: true, // Crucial for responsive cropping
+        hotspot: true,
       },
       validation: (Rule) => Rule.required(),
     }),

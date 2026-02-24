@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import {Toast} from "./components/Toast";
 const inter = Inter({
   weight: ["400", "800"],
   display: "swap",
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} ${inter.style} antialiased`}>
         <Navbar />
+        <Toast />
         {children}
         <Footer />
       </body>

@@ -7,6 +7,10 @@ import cv from "./schemas/cv";
 import personalInfo from "./schemas/personalInfo";
 import featuredProjects from "./schemas/featuredProjects";
 import contact from "./schemas/contact";
+import plan from "./schemas/plan";
+import faq from "./schemas/faq";
+import addOns from "./schemas/addOns";
+import { newsletterContent } from "./schemas/newsletter";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -18,5 +22,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     personalInfo,
     featuredProjects,
     contact,
+    plan,
+    faq,
+    addOns,
+    newsletterContent,
   ],
 };
