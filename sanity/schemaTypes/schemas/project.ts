@@ -66,10 +66,5 @@ export default defineType({
       title: "GitHub Repository URL",
       type: "url",
     }),
-    defineField({
-      name: "order",
-      title: "Display Order",
-      type: "number",
-    }),
   ],
 });

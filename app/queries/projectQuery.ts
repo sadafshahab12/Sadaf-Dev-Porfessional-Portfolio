@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 
-export const projectQuery = groq`*[_type == "project"] | order(order asc) {
+export const projectQuery = groq`*[_type == "project"] | order(_createdAt desc) {
         _id,
         title,
         "slug": slug.current,
@@ -10,5 +10,5 @@ export const projectQuery = groq`*[_type == "project"] | order(order asc) {
         tags,
         demoLink,
         githubLink,
-        order
+        _createdAt
       }`;
