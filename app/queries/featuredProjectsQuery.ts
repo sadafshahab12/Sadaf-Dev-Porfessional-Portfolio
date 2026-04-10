@@ -11,5 +11,6 @@ export const featuredProjectsQuery = groq`*[_type == "featuredProjects"][0] {
         tags,
         demoLink,
         githubLink,
+        order
   }
 }`;

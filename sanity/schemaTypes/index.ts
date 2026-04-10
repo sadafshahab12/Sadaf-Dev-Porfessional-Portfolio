@@ -11,6 +11,7 @@ import plan from "./schemas/plan";
 import faq from "./schemas/faq";
 import addOns from "./schemas/addOns";
 import { newsletterContent } from "./schemas/newsletter";
+import pinterestInquiry from "./schemas/pinterestInquiry";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -26,5 +27,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faq,
     addOns,
     newsletterContent,
+    pinterestInquiry,
   ],
 };

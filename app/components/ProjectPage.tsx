@@ -85,12 +85,12 @@ const ProjectsPage = () => {
                     height={400}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                  <div className="absolute inset-0 bg-slate-950/60 transition-opacity duration-300 flex items-center justify-center gap-4 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                     {project.demoLink && (
                       <Link
                         href={project.demoLink}
                         target="_blank"
-                        className="p-3 rounded-full bg-white text-slate-900 hover:bg-indigo-50 transition-colors"
+                        className="p-3 rounded-full bg-white text-slate-900 hover:bg-indigo-50 transition-colors shadow-lg"
                       >
                         <ExternalLink className="w-5 h-5" />
                       </Link>
@@ -99,7 +99,7 @@ const ProjectsPage = () => {
                       <Link
                         href={project.githubLink}
                         target="_blank"
-                        className="p-3 rounded-full bg-slate-900 text-white hover:bg-slate-800 transition-colors border border-slate-700"
+                        className="p-3 rounded-full bg-slate-900 text-white hover:bg-slate-800 transition-colors border border-slate-700 shadow-lg"
                       >
                         <BsGithub className="w-5 h-5" />
                       </Link>
